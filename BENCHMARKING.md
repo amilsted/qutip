@@ -241,3 +241,46 @@ MAT-MAT (H @ ρ) - tridiagonal H, Dense state:
   256 dia      226.34±0%     216.76±0%    -4.2%
   256 csr      305.26±0%     210.71±0%   -31.0%
 ```
+
+## End-to-End: Coupled Transmons (scqubits)
+
+**File:** `benchmark_scqubits_transmons.py`
+
+**Requires:** `scqubits` (`pip install scqubits`)
+
+**Run:**
+```bash
+python benchmark_scqubits_transmons.py
+```
+
+**What it tests:**
+- `mesolve` comparing `matrix_form=True` vs `matrix_form=False`
+- System of N charge-coupled transmons built with scqubits
+- Time-dependent charge drive (interpolated cosine at qubit frequency)
+- Single photon-loss collapse operator
+- All operators in CSR representation
+- Hilbert space dimension scales as `truncated_dim^N`
+- Reports mean±std with adaptive repeat count targeting ~1s per config
+
+### Results: macOS, Apple Silicon
+
+Compiler: Apple clang 17.0.0 (arm64-apple-darwin24.6.0)
+
+3 levels per transmon (dim = 3^N):
+```
+ N  Dim    Super   Matrix  Speedup
+------------------------------------
+ 2    9    0.004    0.004    1.03x
+ 3   27    0.024    0.022    1.10x
+ 4   81    0.339    0.288    1.18x
+ 5  243    3.062    2.679    1.14x
+```
+
+4 levels per transmon (dim = 4^N):
+```
+ N  Dim    Super   Matrix  Speedup
+------------------------------------
+ 2   16    0.013    0.011    1.12x
+ 3   64    0.220    0.175    1.26x
+ 4  256    5.464    3.948    1.38x
+```
